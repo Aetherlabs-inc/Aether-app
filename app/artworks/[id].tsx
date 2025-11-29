@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -12,6 +12,7 @@ export default function ArtworkDetailScreen() {
     const [artwork, setArtwork] = useState<Artwork | null>(null);
     const [nfcTag, setNfcTag] = useState<NFCTag | null>(null);
     const [loading, setLoading] = useState(true);
+    const [imageError, setImageError] = useState(false);
 
     useEffect(() => {
         loadArtwork();
@@ -26,11 +27,14 @@ export default function ArtworkDetailScreen() {
             return;
         }
         setLoading(true);
+        setImageError(false);
         try {
             const artworkData = await getArtworkById(id);
             setArtwork(artworkData);
 
             if (artworkData) {
+                console.log('Artwork loaded:', artworkData.title);
+                console.log('Image URL:', artworkData.image_url);
                 const tagData = await getNFCTagByArtworkId(id);
                 setNfcTag(tagData);
             }
@@ -76,8 +80,16 @@ export default function ArtworkDetailScreen() {
                 </View>
 
                 <View style={styles.heroImage}>
-                    {artwork.image_url ? (
-                        <Text style={styles.imagePlaceholder}>Image</Text>
+                    {artwork.image_url && !imageError ? (
+                        <Image
+                            source={{ uri: artwork.image_url }}
+                            style={styles.heroImageContent}
+                            resizeMode="cover"
+                            onError={() => {
+                                console.error('Error loading image:', artwork.image_url);
+                                setImageError(true);
+                            }}
+                        />
                     ) : (
                         <Ionicons name="image" size={120} color="#ddd" />
                     )}
@@ -123,7 +135,10 @@ export default function ArtworkDetailScreen() {
                     </View>
 
                     <View style={styles.actions}>
-                        <TouchableOpacity style={styles.actionButton}>
+                        <TouchableOpacity
+                            style={styles.actionButton}
+                            onPress={() => router.push(`/artworks/${artwork.id}/certificate`)}
+                        >
                             <Ionicons name="document-text" size={20} color="#000" />
                             <Text style={styles.actionButtonText}>View Certificate</Text>
                         </TouchableOpacity>
@@ -193,6 +208,11 @@ const styles = StyleSheet.create({
         backgroundColor: '#f5f5f5',
         justifyContent: 'center',
         alignItems: 'center',
+        overflow: 'hidden',
+    },
+    heroImageContent: {
+        width: '100%',
+        height: '100%',
     },
     imagePlaceholder: {
         fontSize: 16,

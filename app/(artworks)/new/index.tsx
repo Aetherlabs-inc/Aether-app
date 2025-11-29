@@ -1,8 +1,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'expo-router';
 
-// Redirect to new multi-step flow
-export default function NewArtworkScreen() {
+export default function NewArtworkIndex() {
   const router = useRouter();
 
   useEffect(() => {
@@ -11,3 +10,4 @@ export default function NewArtworkScreen() {
 
   return null;
 }
+

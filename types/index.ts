@@ -45,6 +45,17 @@ export interface VerificationLevel {
   created_at?: string;
 }
 
+export interface Certificate {
+  id: string;
+  artwork_id: string;
+  certificate_id: string;
+  qr_code_url?: string;
+  blockchain_hash?: string;
+  generated_at?: string;
+  created_at?: string;
+  updated_at?: string;
+}
+
 export interface SurveyResponse {
   id: string;
   email: string;

@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   ScrollView,
   ActivityIndicator,
+  Image,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
@@ -54,7 +55,7 @@ export default function ArtworksScreen() {
     >
       <View style={styles.cardImage}>
         {item.image_url ? (
-          <Text style={styles.imagePlaceholder}>Image</Text>
+          <Image source={{ uri: item.image_url }} style={styles.cardImage} resizeMode="cover" />
         ) : (
           <Ionicons name="image" size={48} color="#ddd" />
         )}

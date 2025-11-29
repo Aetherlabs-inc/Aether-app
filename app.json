@@ -10,13 +10,20 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.rashodkorala.AetheraApp"
+      "bundleIdentifier": "com.rashodkorala.AetheraApp",
+      "infoPlist": {
+        "NFCReaderUsageDescription": "This app uses NFC to read and link NFC tags for artwork authentication and verification.",
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": [
+        "android.permission.NFC"
+      ]
     },
     "web": {
       "bundler": "metro",

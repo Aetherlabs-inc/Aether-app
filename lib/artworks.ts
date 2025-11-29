@@ -99,7 +99,7 @@ export async function getNFCTagByArtworkId(artworkId: string): Promise<NFCTag | 
   return data;
 }
 
-export async function bindNFCTagToArtwork(nfcUID: string, artworkId: string): Promise<NFCTag> {
+export async function linkNfcTag(artworkId: string, nfcUID: string): Promise<NFCTag> {
   // First check if tag exists
   const existingTag = await getNFCTagByUID(nfcUID);
 
@@ -110,7 +110,7 @@ export async function bindNFCTagToArtwork(nfcUID: string, artworkId: string): Pr
       .update({
         artwork_id: artworkId,
         is_bound: true,
-        binding_status: 'bound',
+        binding_status: 'BOUND',
       })
       .eq('id', existingTag.id)
       .select()
@@ -130,7 +130,7 @@ export async function bindNFCTagToArtwork(nfcUID: string, artworkId: string): Pr
         artwork_id: artworkId,
         nfc_uid: nfcUID,
         is_bound: true,
-        binding_status: 'bound',
+        binding_status: 'BOUND',
       })
       .select()
       .single();
@@ -142,6 +142,10 @@ export async function bindNFCTagToArtwork(nfcUID: string, artworkId: string): Pr
 
     return data;
   }
+}
+
+export async function bindNFCTagToArtwork(nfcUID: string, artworkId: string): Promise<NFCTag> {
+  return linkNfcTag(artworkId, nfcUID);
 }
 
 
