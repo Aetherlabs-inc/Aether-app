@@ -178,9 +178,9 @@ export default function ScanScreen() {
                   // Success haptic and sound
                   await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
                   
-                  // Navigate to artwork detail
+                  // Navigate to certificate of authenticity page
                   setTimeout(() => {
-                    router.push(`/artworks/${nfcTag.artwork_id}`);
+                    router.push(`/artworks/${nfcTag.artwork_id}/authenticity`);
                     setIsScanning(false);
                     setScanResult({ type: null });
                   }, 1500);

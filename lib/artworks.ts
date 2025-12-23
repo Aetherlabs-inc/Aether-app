@@ -31,6 +31,33 @@ export async function getArtworkById(artworkId: string): Promise<Artwork | null>
   return data;
 }
 
+/**
+ * Get public artwork by ID - accessible to anyone (authenticated or not)
+ * This function attempts to fetch artwork for public viewing
+ * Note: May require database RLS policy update to allow public access
+ */
+export async function getPublicArtworkById(artworkId: string): Promise<Artwork | null> {
+  try {
+    const { data, error } = await supabase
+      .from('artworks')
+      .select('*')
+      .eq('id', artworkId)
+      .single();
+
+    if (error) {
+      // If error is due to RLS, we might need to use a database function
+      // For now, log and return null
+      console.error('Error fetching public artwork:', error);
+      return null;
+    }
+
+    return data;
+  } catch (error) {
+    console.error('Error in getPublicArtworkById:', error);
+    return null;
+  }
+}
+
 export async function createArtwork(artwork: Omit<Artwork, 'id' | 'created_at' | 'updated_at'>): Promise<Artwork> {
   const { data, error } = await supabase
     .from('artworks')
